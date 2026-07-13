@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+    <title>🌈 Colorful Checklist · Emoji & Icons</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- design tokens — vibrant & playful ----- */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            --glass-bg: rgba(255, 255, 255, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow: 0 20px 60px -16px rgba(0, 0, 0, 0.12);
+            --radius-xl: 40px;
+            --radius-lg: 28px;
+            --radius-md: 18px;
+            --radius-sm: 12px;
+            --transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --font: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+
+            /* vibrant palette */
+            --color-purple: #7c3aed;
+            --color-pink: #ec4899;
+            --color-blue: #3b82f6;
+            --color-cyan: #06b6d4;
+            --color-green: #22c55e;
+            --color-yellow: #eab308;
+            --color-orange: #f97316;
+            --color-red: #ef4444;
+            --color-indigo: #6366f1;
+            --color-teal: #14b8a6;
+            --color-rose: #f43f5e;
+            --color-amber: #f59e0b;
+            --color-lime: #84cc16;
+            --color-emerald: #10b981;
+            --color-violet: #8b5cf6;
+            --color-fuchsia: #d946ef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            font-family: var(--font);
+            padding: 1.2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            color: #1e293b;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ----- main glass container ----- */
+        .glass-container {
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 1.8rem 1.8rem 2rem;
+            box-shadow: var(--shadow), 0 0 0 1px var(--glass-border) inset;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: floatIn 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: padding 0.3s ease;
+        }
+
+        @keyframes floatIn {
+            0% { opacity: 0; transform: translateY(28px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ----- header with emoji ----- */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.8rem 1.2rem;
+            padding-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.4);
+        }
+
+        .header h1 {
+            font-weight: 800;
+            font-size: clamp(1.5rem, 4.5vw, 2.4rem);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #7c3aed, #ec4899, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .header h1 .emoji-big {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            -webkit-text-fill-color: initial;
+            background: none;
+        }
+
+        .app-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .glass-badge {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(6px);
+            padding: 0.3rem 1.2rem;
+            border-radius: 60px;
+            font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+            font-weight: 600;
+            color: #1e293b;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .glass-badge:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        .app-meta input {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(6px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 60px;
+            padding: 0.3rem 1.2rem;
+            font-weight: 600;
+            font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+            color: #1e293b;
+            width: min(150px, 30vw);
+            min-width: 90px;
+            transition: var(--transition);
+        }
+
+        .app-meta input:focus {
+            outline: none;
+            border-color: var(--color-purple);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ----- progress summary (colorful) ----- */
+        .progress-summary {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            padding: 0.7rem 1.6rem;
+            border-radius: 80px;
+            margin-bottom: 1.8rem;
+            gap: 0.8rem 1.5rem;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.8rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+            padding: 0.15rem 0.6rem;
+            border-radius: 40px;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .stat-item i {
+            font-size: clamp(0.9rem, 1.3vw, 1.2rem);
+        }
+
+        .stat-complete { color: #16a34a; background: rgba(22, 163, 74, 0.08); }
+        .stat-progress { color: #f59e0b; background: rgba(245, 158, 11, 0.08); }
+        .stat-incomplete { color: #dc2626; background: rgba(220, 38, 38, 0.08); }
+        .stat-total { color: #7c3aed; background: rgba(124, 58, 237, 0.08); }
+
+        .progress-bar-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .progress-bar-bg {
+            width: min(180px, 28vw);
+            height: 10px;
+            background: rgba(226, 232, 240, 0.4);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #eab308, #f97316, #ec4899, #7c3aed);
+            border-radius: 30px;
+            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 0%;
+            box-shadow: 0 0 24px rgba(34, 197, 94, 0.2);
+        }
+
+        #percentLabel {
+            font-weight: 800;
+            font-size: clamp(0.8rem, 1.3vw, 1rem);
+            color: #1e293b;
+            min-width: 44px;
+            text-align: right;
+        }
+
+        /* ----- controls (colorful) ----- */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 0.8rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.2rem 0.4rem;
+        }
+
+        .filter-group label {
+            font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+            font-weight: 700;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .filter-group select {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(6px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 60px;
+            padding: 0.35rem 2rem 0.35rem 1rem;
+            font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+            transition: var(--transition);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475669' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.8rem center;
+            background-size: 10px;
+            min-width: 70px;
+            max-width: 160px;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--color-purple);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.08);
+        }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(6px);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            border-radius: 60px;
+            padding: 0.05rem 0.05rem 0.05rem 1rem;
+            transition: var(--transition);
+            flex: 1 1 min(200px, 100%);
+            min-width: 130px;
+        }
+
+        .search-wrapper:focus-within {
+            border-color: var(--color-purple);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.06);
+            background: rgba(255, 255, 255, 0.45);
+        }
+
+        .search-wrapper i {
+            color: #94a3b8;
+            font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+        }
+
+        .search-wrapper input {
+            border: none;
+            padding: 0.4rem 0.6rem 0.4rem 0.2rem;
+            font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+            width: 100%;
+            min-width: 60px;
+            background: transparent;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .search-wrapper input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+        .search-wrapper input:focus { outline: none; }
+
+        .clear-btn {
+            background: transparent;
+            border: none;
+            padding: 0 10px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+        }
+        .clear-btn:hover { color: #1e293b; }
+
+        .btn-reset {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1.5px solid rgba(239, 68, 68, 0.2);
+            padding: 0.35rem 1.4rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+            color: #dc2626;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+
+        .btn-reset:hover {
+            background: rgba(239, 68, 68, 0.18);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.1);
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #7c3aed, #ec4899, #3b82f6);
+            border: none;
+            padding: 0.35rem 1.6rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 24px rgba(124, 58, 237, 0.2);
+            white-space: nowrap;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 36px rgba(124, 58, 237, 0.3);
+        }
+        .btn-add:active { transform: scale(0.95); }
+
+        /* ----- table (colorful, playful) ----- */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius-lg);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 8px 32px -12px rgba(0, 0, 0, 0.02);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+            min-width: 1000px;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(6px);
+            font-weight: 800;
+            padding: 0.8rem 0.8rem;
+            text-align: left;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            color: #1e293b;
+            white-space: nowrap;
+            font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        td {
+            padding: 0.65rem 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            vertical-align: middle;
+            background: rgba(255, 255, 255, 0.02);
+            transition: background 0.15s ease;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ----- colorful badges ----- */
+        .category-badge {
+            font-weight: 700;
+            font-size: clamp(0.55rem, 0.9vw, 0.7rem);
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+            display: inline-block;
+            white-space: nowrap;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        .category-badge:hover { transform: scale(1.05); }
+
+        /* category colors */
+        .cat-architecture { background: #dbeafe; color: #1e40af; }
+        .cat-database { background: #d1fae5; color: #065f46; }
+        .cat-security { background: #fee2e2; color: #991b1b; }
+        .cat-api { background: #fef3c7; color: #92400e; }
+        .cat-frontend { background: #fce7f3; color: #9d174d; }
+        .cat-code { background: #e0e7ff; color: #3730a3; }
+        .cat-devops { background: #ede9fe; color: #5b21b6; }
+        .cat-default { background: #f1f5f9; color: #334155; }
+
+        .risk-tag {
+            font-size: clamp(0.5rem, 0.8vw, 0.6rem);
+            font-weight: 800;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            display: inline-block;
+            white-space: nowrap;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .risk-critical { background: #fee2e2; color: #991b1b; }
+        .risk-high { background: #fef3c7; color: #92400e; }
+        .risk-medium { background: #dbeafe; color: #1e4b8f; }
+        .risk-low { background: #d1fae5; color: #065f46; }
+
+        .phase-tag {
+            font-size: clamp(0.5rem, 0.85vw, 0.65rem);
+            font-weight: 700;
+            padding: 0.15rem 0.8rem;
+            border-radius: 40px;
+            white-space: nowrap;
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            color: #475569;
+        }
+
+        .icon-automation {
+            font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+            width: 1.6rem;
+            text-align: center;
+            display: inline-block;
+        }
+
+        /* ----- status toggle (vibrant) ----- */
+        .status-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            padding: 0.1rem 0.1rem 0.1rem 0.8rem;
+            border-radius: 60px;
+            border: 1.5px solid rgba(148, 163, 184, 0.15);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: clamp(0.55rem, 0.9vw, 0.7rem);
+            font-weight: 700;
+            user-select: none;
+            white-space: nowrap;
+            min-height: 30px;
+        }
+
+        .status-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        .status-toggle:active { transform: scale(0.93); }
+
+        .status-toggle .toggle-icon {
+            width: clamp(26px, 3.8vw, 32px);
+            height: clamp(26px, 3.8vw, 32px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.5);
+            color: #94a3b8;
+            font-size: clamp(0.65rem, 1vw, 0.85rem);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .status-toggle.complete {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.12);
+        }
+        .status-toggle.complete .toggle-icon {
+            background: #22c55e;
+            color: white;
+            box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2);
+        }
+
+        .status-toggle.inprogress {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.12);
+        }
+        .status-toggle.inprogress .toggle-icon {
+            background: #f59e0b;
+            color: white;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
+            animation: spin 1.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-toggle.incomplete {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.08);
+        }
+        .status-toggle.incomplete .toggle-icon {
+            background: #ef4444;
+            color: white;
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.12);
+        }
+
+        .status-emoji {
+            font-size: clamp(0.7rem, 1.2vw, 0.95rem);
+            margin-right: 2px;
+        }
+
+        /* ----- action buttons (colorful) ----- */
+        .action-btns {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .action-btns button {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+            padding: 0.25rem 0.55rem;
+            border-radius: 40px;
+            transition: var(--transition);
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 34px;
+            min-height: 34px;
+        }
+
+        .action-btns button:hover { transform: scale(1.1); }
+
+        .action-btns .edit-btn:hover {
+            color: #7c3aed;
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .action-btns .delete-btn:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .action-btns .emoji-btn {
+            font-size: clamp(0.8rem, 1.2vw, 1rem);
+        }
+
+        .empty-row td {
+            padding: 3rem 0.5rem;
+            text-align: center;
+            color: #94a3b8;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .empty-row .big-emoji {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ----- MODAL (colorful, emoji-friendly) ----- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.15);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: modalFade 0.25s ease;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        @keyframes modalFade {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .modal-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border-radius: var(--radius-xl);
+            padding: 2rem 2.2rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            animation: modalCardIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-height: 92vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalCardIn {
+            0% { opacity: 0; transform: scale(0.94) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-card h2 {
+            font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+            font-weight: 800;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #7c3aed, #ec4899, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-card h2 .modal-emoji {
+            font-size: 1.6rem;
+            -webkit-text-fill-color: initial;
+            background: none;
+        }
+
+        .modal-card label {
+            font-weight: 700;
+            font-size: clamp(0.7rem, 1.1vw, 0.8rem);
+            color: #475569;
+            display: block;
+            margin-top: 0.9rem;
+            letter-spacing: 0.01em;
+        }
+
+        .modal-card label:first-of-type { margin-top: 0; }
+
+        .modal-card input,
+        .modal-card select,
+        .modal-card textarea {
+            width: 100%;
+            padding: 0.6rem 1.2rem;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 60px;
+            font-size: clamp(0.8rem, 1.1vw, 0.9rem);
+            margin-top: 0.2rem;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            transition: var(--transition);
+            color: #1e293b;
+        }
+
+        .modal-card input:focus,
+        .modal-card select:focus,
+        .modal-card textarea:focus {
+            outline: none;
+            border-color: var(--color-purple);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.06);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-card textarea {
+            border-radius: var(--radius-md);
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .modal-card input[type="datetime-local"] {
+            padding: 0.5rem 1.2rem;
+        }
+
+        .modal-card .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.8rem;
+            margin-top: 1.8rem;
+            flex-wrap: wrap;
+        }
+
+        .modal-card .modal-actions button {
+            padding: 0.55rem 2rem;
+            border: none;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: clamp(0.75rem, 1.1vw, 0.85rem);
+            min-width: 100px;
+        }
+
+        .modal-card .btn-cancel {
+            background: rgba(241, 245, 249, 0.3);
+            backdrop-filter: blur(4px);
+            color: #1e293b;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .modal-card .btn-cancel:hover {
+            background: rgba(226, 232, 240, 0.4);
+            transform: scale(1.02);
+        }
+
+        .modal-card .btn-save {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            color: white;
+            box-shadow: 0 4px 24px rgba(124, 58, 237, 0.15);
+        }
+
+        .modal-card .btn-save:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 32px rgba(124, 58, 237, 0.2);
+        }
+
+        .modal-card .btn-save:active { transform: scale(0.96); }
+
+        /* emoji picker hint */
+        .emoji-hint {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-top: 0.2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .emoji-hint span {
+            font-size: 1rem;
+        }
+
+        /* ----- footer ----- */
+        .footer-note {
+            margin-top: 1.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            color: #64748b;
+            font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+            border-top: 1.5px dashed rgba(255, 255, 255, 0.2);
+            padding-top: 1.2rem;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .footer-note .emoji-sm {
+            font-size: 1rem;
+        }
+
+        /* ----- responsive ----- */
+        @media (max-width: 992px) {
+            .glass-container { padding: 1.2rem 1rem 1.5rem; border-radius: 32px; }
+            .progress-summary { border-radius: 60px; padding: 0.6rem 1.2rem; }
+            table { min-width: 820px; }
+            th, td { padding: 0.5rem 0.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 0.8rem; }
+            .glass-container { padding: 1rem 0.8rem 1.2rem; border-radius: 28px; }
+            .header { flex-direction: column; align-items: stretch; gap: 0.6rem; padding-bottom: 0.8rem; }
+            .header h1 { font-size: 1.3rem; justify-content: center; }
+            .app-meta { justify-content: center; gap: 0.4rem; }
+            .app-meta input { width: 120px; font-size: 0.75rem; padding: 0.2rem 0.8rem; }
+            .glass-badge { font-size: 0.7rem; padding: 0.2rem 0.8rem; }
+            .progress-summary { flex-direction: column; align-items: stretch; gap: 0.5rem; border-radius: 40px; padding: 0.6rem 1rem; }
+            .progress-stats { justify-content: center; gap: 0.4rem 1rem; }
+            .stat-item { font-size: 0.7rem; }
+            .progress-bar-wrap { justify-content: center; }
+            .controls { flex-direction: column; align-items: stretch; gap: 0.4rem; }
+            .filter-group { flex-wrap: wrap; }
+            .filter-group select { flex: 1; min-width: 60px; font-size: 0.7rem; padding: 0.3rem 1.6rem 0.3rem 0.8rem; }
+            .search-wrapper { flex: 1 1 100%; }
+            .search-wrapper input { font-size: 0.75rem; padding: 0.3rem 0.4rem; }
+            .btn-add, .btn-reset { justify-content: center; flex: 1; font-size: 0.7rem; padding: 0.3rem 1rem; }
+            .table-wrap { border-radius: var(--radius-md); }
+            table { font-size: 0.65rem; min-width: 680px; }
+            th { font-size: 0.55rem; padding: 0.4rem 0.4rem; }
+            td { padding: 0.35rem 0.4rem; }
+            .status-toggle { font-size: 0.5rem; padding: 0.05rem 0.05rem 0.05rem 0.4rem; min-height: 24px; }
+            .status-toggle .toggle-icon { width: 20px; height: 20px; font-size: 0.5rem; }
+            .action-btns button { font-size: 0.65rem; padding: 0.15rem 0.4rem; min-width: 28px; min-height: 28px; }
+            .modal-card { padding: 1.2rem 1rem; border-radius: 28px; max-height: 85vh; }
+            .modal-card h2 { font-size: 1.1rem; }
+            .modal-card input, .modal-card select, .modal-card textarea { font-size: 0.8rem; padding: 0.5rem 1rem; }
+            .modal-card .modal-actions button { padding: 0.4rem 1.2rem; font-size: 0.75rem; min-width: 70px; }
+            .footer-note { flex-direction: column; align-items: center; text-align: center; gap: 0.2rem; font-size: 0.6rem; padding-top: 0.8rem; margin-top: 1.2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .glass-container { padding: 0.6rem 0.4rem 0.8rem; border-radius: 20px; }
+            .header h1 { font-size: 1.1rem; }
+            .app-meta input { width: 90px; font-size: 0.65rem; }
+            .glass-badge { font-size: 0.6rem; padding: 0.15rem 0.6rem; }
+            .progress-stats { gap: 0.2rem 0.6rem; }
+            .stat-item { font-size: 0.6rem; }
+            .stat-item i { font-size: 0.7rem; }
+            .progress-bar-bg { width: 80px; height: 6px; }
+            #percentLabel { font-size: 0.65rem; min-width: 30px; }
+            table { font-size: 0.55rem; min-width: 540px; }
+            th { font-size: 0.5rem; padding: 0.3rem 0.25rem; }
+            td { padding: 0.25rem 0.25rem; }
+            .category-badge { font-size: 0.45rem; padding: 0.1rem 0.4rem; }
+            .risk-tag { font-size: 0.4rem; padding: 0.1rem 0.4rem; }
+            .phase-tag { font-size: 0.4rem; padding: 0.1rem 0.4rem; }
+            .status-toggle { font-size: 0.4rem; padding: 0.05rem 0.05rem 0.05rem 0.25rem; min-height: 18px; gap: 3px; }
+            .status-toggle .toggle-icon { width: 16px; height: 16px; font-size: 0.4rem; }
+            .action-btns button { font-size: 0.5rem; padding: 0.1rem 0.3rem; min-width: 22px; min-height: 22px; }
+            .modal-card { padding: 0.8rem 0.6rem; border-radius: 20px; max-height: 80vh; }
+            .modal-card h2 { font-size: 0.95rem; margin-bottom: 0.8rem; }
+            .modal-card label { font-size: 0.6rem; margin-top: 0.5rem; }
+            .modal-card input, .modal-card select, .modal-card textarea { font-size: 0.7rem; padding: 0.4rem 0.8rem; border-radius: 40px; }
+            .modal-card textarea { min-height: 44px; }
+            .modal-card .modal-actions { margin-top: 1rem; gap: 0.4rem; }
+            .modal-card .modal-actions button { padding: 0.3rem 0.8rem; font-size: 0.65rem; min-width: 50px; }
+            .footer-note { font-size: 0.5rem; padding-top: 0.6rem; margin-top: 0.8rem; }
+        }
+
+        /* reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+            .status-toggle.inprogress .toggle-icon { animation: none; }
+        }
+
+        /* keyboard focus */
+        button:focus-visible, select:focus-visible, input:focus-visible,
+        .status-toggle:focus-visible { outline: 3px solid #7c3aed; outline-offset: 2px; }
+
+        /* scrollbar */
+        .modal-card::-webkit-scrollbar { width: 4px; }
+        .modal-card::-webkit-scrollbar-track { background: transparent; }
+        .modal-card::-webkit-scrollbar-thumb { background: rgba(124, 58, 237, 0.2); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="glass-container" role="main">
+        <!-- header with emoji -->
+        <header class="header">
+            <h1>
+                <span class="emoji-big">📋</span>
+                <span>Colorful Checklist</span>
+                <span style="font-size:0.6em; -webkit-text-fill-color:initial; background:none;">🌈</span>
+            </h1>
+            <div class="app-meta">
+                <span class="glass-badge">📅 <span id="todayDate"></span></span>
+                <span class="glass-badge">👤 <input type="text" id="globalUser" placeholder="Your name" value="Tester" /></span>
+            </div>
+        </header>
+
+        <!-- progress summary -->
+        <section class="progress-summary" aria-label="Progress summary">
+            <div class="progress-stats">
+                <span class="stat-item stat-complete">✅ Done: <span id="completeCount">0</span></span>
+                <span class="stat-item stat-progress">🔄 In Progress: <span id="progressCount">0</span></span>
+                <span class="stat-item stat-incomplete">⏳ Incomplete: <span id="incompleteCount">0</span></span>
+                <span class="stat-item stat-total">📊 Total: <span id="totalCount">0</span></span>
+            </div>
+            <div class="progress-bar-wrap">
+                <span id="percentLabel">0%</span>
+                <div class="progress-bar-bg" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar-fill" id="progressFill" style="width:0%;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- controls -->
+        <section class="controls" aria-label="Filters and actions">
+            <div class="filter-group">
+                <label for="filterCategory">🏷️ Category</label>
+                <select id="filterCategory">
+                    <option value="all">All</option>
+                    <option value="Architecture & Design">🏛️ Architecture</option>
+                    <option value="Database & Data Management">🗄️ Database</option>
+                    <option value="Security">🔒 Security</option>
+                    <option value="API & Integration">🔗 API</option>
+                    <option value="Frontend & User Experience (UX)">🎨 Frontend</option>
+                    <option value="Code Quality & Standards">📝 Code</option>
+                    <option value="DevOps & Deployment">🚀 DevOps</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="filterRisk">⚠️ Risk</label>
+                <select id="filterRisk">
+                    <option value="all">All</option>
+                    <option value="Critical">🔴 Critical</option>
+                    <option value="High">🟠 High</option>
+                    <option value="Medium">🟡 Medium</option>
+                    <option value="Low">🟢 Low</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="filterStatus">📌 Status</label>
+                <select id="filterStatus">
+                    <option value="all">All</option>
+                    <option value="complete">✅ Done</option>
+                    <option value="inprogress">🔄 In Progress</option>
+                    <option value="incomplete">⏳ Incomplete</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="filterUser">👤 User</label>
+                <select id="filterUser">
+                    <option value="all">All</option>
+                </select>
+            </div>
+
+            <div class="search-wrapper">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input type="text" id="searchInput" placeholder="🔍 Search..." />
+                <button class="clear-btn" id="clearSearch" aria-label="Clear search">✖</button>
+            </div>
+
+            <button class="btn-reset" id="resetAllBtn">🔄 Reset</button>
+            <button class="btn-add" id="addItemBtn">✨ Add Item</button>
+        </section>
+
+        <!-- table -->
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>📂 Category</th>
+                        <th>📌 Criteria</th>
+                        <th>📝 Description</th>
+                        <th>⚠️ Risk</th>
+                        <th>🤖 Auto</th>
+                        <th>📋 Phase</th>
+                        <th>🎯 Status</th>
+                        <th>👤 Done By</th>
+                        <th>📅 Done On</th>
+                        <th>⚡ Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- dynamic rows -->
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="footer-note">
+            <span>💡 Click status badge to cycle · ✨ Add emojis to tasks!</span>
+            <span>🌈 Made with <span class="emoji-sm">❤️</span> · Multi-user · 📅 Date picker</span>
+        </footer>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="itemModal" role="dialog" aria-modal="true">
+        <div class="modal-card">
+            <h2><span class="modal-emoji">✏️</span> <span id="modalTitleText">Add Item</span></h2>
+            <input type="hidden" id="editId" value="" />
+
+            <label for="formCategory">📂 Category</label>
+            <select id="formCategory">
+                <option value="Architecture & Design">🏛️ Architecture & Design</option>
+                <option value="Database & Data Management">🗄️ Database & Data Management</option>
+                <option value="Security">🔒 Security</option>
+                <option value="API & Integration">🔗 API & Integration</option>
+                <option value="Frontend & User Experience (UX)">🎨 Frontend & UX</option>
+                <option value="Code Quality & Standards">📝 Code Quality & Standards</option>
+                <option value="DevOps & Deployment">🚀 DevOps & Deployment</option>
+            </select>
+
+            <label for="formCriteria">📌 Validation Criteria <span style="color:#94a3b8;font-weight:400;">(add emojis! 🎉)</span></label>
+            <input type="text" id="formCriteria" placeholder="e.g. 🚀 API Error Responses" />
+
+            <label for="formDescription">📝 Description</label>
+            <textarea id="formDescription" rows="2" placeholder="Detailed description with emojis... ✨"></textarea>
+
+            <label for="formRisk">⚠️ Risk Level</label>
+            <select id="formRisk">
+                <option value="Critical">🔴 Critical</option>
+                <option value="High">🟠 High</option>
+                <option value="Medium">🟡 Medium</option>
+                <option value="Low">🟢 Low</option>
+            </select>
+
+            <label for="formPhase">📋 Review Phase</label>
+            <input type="text" id="formPhase" placeholder="e.g. 🔍 Code Review" />
+
+            <label for="formAutomation">🤖 Automation Ready</label>
+            <select id="formAutomation">
+                <option value="Yes">✅ Yes</option>
+                <option value="No">❌ No</option>
+                <option value="Yes (CI)">⚡ Yes (CI)</option>
+                <option value="Yes (SAST)">🛡️ Yes (SAST)</option>
+                <option value="Yes (Lighthouse)">📊 Yes (Lighthouse)</option>
+            </select>
+
+            <label for="formDoneBy">👤 Done By</label>
+            <input type="text" id="formDoneBy" placeholder="Who completed this? 👤" />
+
+            <label for="formDoneOn">📅 Done On (date & time)</label>
+            <input type="datetime-local" id="formDoneOn" />
+
+            <div class="emoji-hint">💡 Tip: Use emojis in any field! 🎨✨🚀</div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" id="modalCancel">❌ Cancel</button>
+                <button class="btn-save" id="modalSave">💾 Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ----- DEFAULT DATA with emojis -----
+            const defaultData = [
+                { category: "Architecture & Design", criteria: "🏛️ Modularity & Reusability",
+                    description: "MVC / Microservices separation. 🧩", risk: "High", automation: "No",
+                    phase: "Design Review" },
+                { category: "Architecture & Design", criteria: "🔗 API Design",
+                    description: "RESTful / GraphQL best practices. 🌐", risk: "Medium", automation: "No",
+                    phase: "Design Review" },
+                { category: "Architecture & Design", criteria: "📈 Scalability",
+                    description: "Stateless, caching, message queues. 🚀", risk: "High", automation: "No",
+                    phase: "Design Review" },
+                { category: "Architecture & Design", criteria: "🛡️ Error Handling",
+                    description: "Global error handling, graceful exceptions. 🎯", risk: "High", automation: "Yes",
+                    phase: "Code Review" },
+                { category: "Database & Data Management", criteria: "🗄️ Normalization",
+                    description: "Schema in 3rd Normal Form. 📊", risk: "Medium", automation: "No",
+                    phase: "Design Review" },
+                { category: "Database & Data Management", criteria: "🔍 Indexing Strategy",
+                    description: "Indexes on FK and frequent queries. ⚡", risk: "High", automation: "No",
+                    phase: "Design Review" },
+                { category: "Database & Data Management", criteria: "🔒 Constraints",
+                    description: "NOT NULL, UNIQUE, FOREIGN KEY. 🛡️", risk: "High", automation: "Yes",
+                    phase: "Code Review" },
+                { category: "Database & Data Management", criteria: "📋 Audit Fields",
+                    description: "created_by, created_time, etc. 📝", risk: "Medium", automation: "Yes",
+                    phase: "Code Review" },
+                { category: "Database & Data Management", criteria: "📌 Default Values",
+                    description: "Default values for columns. 🎯", risk: "Low", automation: "Yes",
+                    phase: "Code Review" },
+                { category: "Database & Data Management", criteria: "📐 Naming Conventions",
+                    description: "snake_case table/column names. 🏷️", risk: "Low", automation: "Yes",
+                    phase: "Code Review" },
+                { category: "Database & Data Management", criteria: "🔄 Migration Scripts",
+                    description: "Version-controlled migrations. 📦", risk: "High", automation: "Yes (CI)",
+                    phase: "Code Review" },
+                { category: "Security", criteria: "🔐 Sensitive Data Hashing",
+                    description: "bcrypt/Argon2 for passwords, secrets in vault. 🗝️", risk: "Critical",
+                    automation: "Yes", phase: "Code Review" },
+                { category: "Security", criteria: "🌐 Data in Transit",
+                    description: "HTTPS/TLS everywhere. 🔒", risk: "Critical", automation: "Yes",
+                    phase: "Design/Code Review" },
+                { category: "Security", criteria: "🔑 Authentication (JWT/Session)",
+                    description: "HttpOnly, SameSite cookies, UUID session. 🛡️", risk: "Critical",
+                    automation: "Yes", phase: "Code Review" },
+                { category: "Security", criteria: "👥 Authorization (RBAC)",
+                    description: "Role-Based Access Control. 🎯", risk: "Critical", automation: "Yes",
+                    phase: "Code Review" },
+                { category: "Security", criteria: "🧪 SQL Injection & XSS",
+                    description: "Parameterized queries, sanitization. 🛡️", risk: "Critical",
+                    automation: "Yes (SAST)", phase: "Code Review" },
+                { category: "Security", criteria: "📎 File Uploads",
+                    description: "Validate type/size, scan, store outside webroot. 📁", risk: "High",
+                    automation: "Yes", phase: "Code Review" },
+                { category: "Security", criteria: "📊 Activity Logging",
+                    description: "Login/logout/modifications logged with user, IP, session. 📝", risk: "High",
+                    automation: "Yes", phase: "Design Review" },
+                { category: "API & Integration", criteria: "🔗 API Error Responses",
+                    description: "Consistent error structure (status, message). ⚠️", risk: "High",
+                    automation: "Yes", phase: "Code Review" },
+                { category: "API & Integration", criteria: "⏱️ Rate Limiting",
+                    description: "Prevent API abuse / DDoS. 🛡️", risk: "Medium", automation: "No",
+                    phase: "Design/Code Review" },
+                { category: "API & Integration", criteria: "💾 Caching Strategy",
+                    description: "Redis for frequently accessed data. ⚡", risk: "Medium", automation: "No",
+                    phase: "Design Review" },
+                { category: "API & Integration", criteria: "🌍 External Services",
+                    description: "Timeouts, retry, circuit breakers. 🔄", risk: "High", automation: "No",
+                    phase: "Code Review" },
+                { category: "Frontend & User Experience (UX)", criteria: "♿ Accessibility (WCAG 2.1)",
+                    description: "Keyboard, screen reader, color contrast. 🎨", risk: "Medium",
+                    automation: "Yes (Lighthouse)", phase: "Code Review" },
+                { category: "Frontend & User Experience (UX)", criteria: "✅ Input Validation",
+                    description: "Real-time feedback, clear error messages. 💬", risk: "Medium",
+                    automation: "Yes", phase: "Code Review" },
+                { category: "Frontend & User Experience (UX)", criteria: "📧 Email UX & Format",
+                    description: "Trim, lowercase, validate TLD. ✉️", risk: "Low", automation: "Yes",
+                    phase: "Code Review" },
+                { category: "Frontend & User Experience (UX)", criteria: "⚡ Page Load Time (Core Web Vitals)",
+                    description: "LCP, FID, CLS thresholds met. 🚀", risk: "High",
+                    automation: "Yes (Lighthouse)", phase: "Code Review" },
+                { category: "Code Quality & Standards", criteria: "📝 Coding Standards",
+                    description: "Linter (ESLint/Pylint) + formatter. ✨", risk: "Low",
+                    automation: "Yes (CI)", phase: "Code Review" },
+                { category: "Code Quality & Standards", criteria: "📊 Logging",
+                    description: "Appropriate log levels. 📋", risk: "Medium", automation: "Yes",
+                    phase: "Code Review" },
+                { category: "Code Quality & Standards", criteria: "🧪 Unit/Integration Tests",
+                    description: "Coverage >80%. 🎯", risk: "High", automation: "Yes (CI)",
+                    phase: "Code Review" },
+                { category: "Code Quality & Standards", criteria: "📚 API Documentation",
+                    description: "OpenAPI/Swagger. 📖", risk: "Medium", automation: "No",
+                    phase: "Design Review" },
+                { category: "DevOps & Deployment", criteria: "⚙️ CI/CD Pipeline",
+                    description: "Linters, SAST, unit tests on commit. 🔄", risk: "High",
+                    automation: "Yes (CI)", phase: "CI/CD Config Review" },
+                { category: "DevOps & Deployment", criteria: "🔧 Environment Variables",
+                    description: "No hard-coding, all env config. 🛠️", risk: "High", automation: "Yes",
+                    phase: "Code Review" },
+                { category: "DevOps & Deployment", criteria: "💚 Health Checks",
+                    description: "/health or /status endpoint. 🏥", risk: "Medium", automation: "Yes",
+                    phase: "Code Review" },
+                { category: "DevOps & Deployment", criteria: "↩️ Rollback Strategy",
+                    description: "Documented and tested rollback plan. 🔄", risk: "High", automation: "No",
+                    phase: "Design/Release Review" }
+            ];
+
+            let items = [];
+            let nextId = 1;
+
+            function initItems() {
+                items = defaultData.map((d, idx) => ({
+                    id: 'item-' + (nextId++),
+                    category: d.category,
+                    criteria: d.criteria,
+                    description: d.description,
+                    risk: d.risk,
+                    automation: d.automation,
+                    phase: d.phase,
+                    status: 'incomplete',
+                    doneBy: '',
+                    doneOn: ''
+                }));
+            }
+            initItems();
+
+            // DOM refs
+            const tbody = document.getElementById('tableBody');
+            const filterCategory = document.getElementById('filterCategory');
+            const filterRisk = document.getElementById('filterRisk');
+            const filterStatus = document.getElementById('filterStatus');
+            const filterUser = document.getElementById('filterUser');
+            const searchInput = document.getElementById('searchInput');
+            const clearSearch = document.getElementById('clearSearch');
+            const resetAllBtn = document.getElementById('resetAllBtn');
+            const addItemBtn = document.getElementById('addItemBtn');
+
+            const completeSpan = document.getElementById('completeCount');
+            const progressSpan = document.getElementById('progressCount');
+            const incompleteSpan = document.getElementById('incompleteCount');
+            const totalSpan = document.getElementById('totalCount');
+            const progressFill = document.getElementById('progressFill');
+            const percentLabel = document.getElementById('percentLabel');
+
+            const modal = document.getElementById('itemModal');
+            const modalTitleText = document.getElementById('modalTitleText');
+            const editId = document.getElementById('editId');
+            const formCategory = document.getElementById('formCategory');
+            const formCriteria = document.getElementById('formCriteria');
+            const formDescription = document.getElementById('formDescription');
+            const formRisk = document.getElementById('formRisk');
+            const formPhase = document.getElementById('formPhase');
+            const formAutomation = document.getElementById('formAutomation');
+            const formDoneBy = document.getElementById('formDoneBy');
+            const formDoneOn = document.getElementById('formDoneOn');
+            const modalCancel = document.getElementById('modalCancel');
+            const modalSave = document.getElementById('modalSave');
+            const globalUser = document.getElementById('globalUser');
+
+            document.getElementById('todayDate').textContent = new Date().toISOString().slice(0, 10);
+
+            // ----- helpers -----
+            function getCategoryEmoji(cat) {
+                const map = {
+                    'Architecture & Design': '🏛️',
+                    'Database & Data Management': '🗄️',
+                    'Security': '🔒',
+                    'API & Integration': '🔗',
+                    'Frontend & User Experience (UX)': '🎨',
+                    'Code Quality & Standards': '📝',
+                    'DevOps & Deployment': '🚀'
+                };
+                return map[cat] || '📂';
+            }
+
+            function getCategoryClass(cat) {
+                const map = {
+                    'Architecture & Design': 'cat-architecture',
+                    'Database & Data Management': 'cat-database',
+                    'Security': 'cat-security',
+                    'API & Integration': 'cat-api',
+                    'Frontend & User Experience (UX)': 'cat-frontend',
+                    'Code Quality & Standards': 'cat-code',
+                    'DevOps & Deployment': 'cat-devops'
+                };
+                return map[cat] || 'cat-default';
+            }
+
+            function getRiskEmoji(risk) {
+                const map = { 'Critical': '🔴', 'High': '🟠', 'Medium': '🟡', 'Low': '🟢' };
+                return map[risk] || '⚠️';
+            }
+
+            function getStatusEmoji(status) {
+                if (status === 'complete') return '✅';
+                if (status === 'inprogress') return '🔄';
+                return '⏳';
+            }
+
+            function getStatusLabel(status) {
+                if (status === 'complete') return 'Done';
+                if (status === 'inprogress') return 'In Progress';
+                return 'Incomplete';
+            }
+
+            function riskClass(r) {
+                const map = { 'Critical': 'risk-critical', 'High': 'risk-high', 'Medium': 'risk-medium',
+                    'Low': 'risk-low' };
+                return map[r] || 'risk-medium';
+            }
+
+            function automationIcon(val) {
+                if (!val) return '<span class="icon-automation">❌</span>';
+                return val.toLowerCase().includes('yes') ?
+                    '<span class="icon-automation">✅</span>' :
+                    '<span class="icon-automation">❌</span>';
+            }
+
+            function statusClass(s) {
+                if (s === 'complete') return 'complete';
+                if (s === 'inprogress') return 'inprogress';
+                return 'incomplete';
+            }
+
+            function nextStatus(current) {
+                if (current === 'incomplete') return 'inprogress';
+                if (current === 'inprogress') return 'complete';
+                return 'incomplete';
+            }
+
+            function formatDateTime(iso) {
+                if (!iso) return '';
+                try {
+                    const d = new Date(iso);
+                    return d.toISOString().slice(0, 10) + ' ' + d.toTimeString().slice(0, 8);
+                } catch { return iso; }
+            }
+
+            function getUniqueUsers() {
+                const users = new Set();
+                items.forEach(it => { if (it.doneBy) users.add(it.doneBy); });
+                return Array.from(users).sort();
+            }
+
+            function updateUserFilter() {
+                const users = getUniqueUsers();
+                const currentVal = filterUser.value;
+                filterUser.innerHTML = '<option value="all">All</option>';
+                users.forEach(u => {
+                    const opt = document.createElement('option');
+                    opt.value = u;
+                    opt.textContent = u;
+                    filterUser.appendChild(opt);
+                });
+                if (users.includes(currentVal)) filterUser.value = currentVal;
+                else filterUser.value = 'all';
+            }
+
+            // ----- CRUD -----
+            function addItem(data) {
+                const newItem = {
+                    id: 'item-' + (nextId++),
+                    category: data.category || 'Architecture & Design',
+                    criteria: data.criteria || '📌 New Item',
+                    description: data.description || '',
+                    risk: data.risk || 'Medium',
+                    automation: data.automation || 'No',
+                    phase: data.phase || 'Code Review',
+                    status: data.status || 'incomplete',
+                    doneBy: data.doneBy || '',
+                    doneOn: data.doneOn || ''
+                };
+                items.push(newItem);
+                render();
+            }
+
+            function updateItem(id, data) {
+                const idx = items.findIndex(it => it.id === id);
+                if (idx === -1) return;
+                const item = items[idx];
+                item.category = data.category || item.category;
+                item.criteria = data.criteria || item.criteria;
+                item.description = data.description !== undefined ? data.description : item.description;
+                item.risk = data.risk || item.risk;
+                item.automation = data.automation || item.automation;
+                item.phase = data.phase || item.phase;
+                if (data.status) item.status = data.status;
+                if (data.doneBy !== undefined) item.doneBy = data.doneBy;
+                if (data.doneOn !== undefined) item.doneOn = data.doneOn;
+                render();
+            }
+
+            function deleteItem(id) {
+                if (!confirm('🗑️ Delete this item?')) return;
+                items = items.filter(it => it.id !== id);
+                render();
+            }
+
+            function toggleStatus(id) {
+                const item = items.find(it => it.id === id);
+                if (!item) return;
+                const newStatus = nextStatus(item.status);
+                item.status = newStatus;
+                if (newStatus === 'complete') {
+                    const user = globalUser.value.trim() || 'Tester';
+                    item.doneBy = user;
+                    item.doneOn = new Date().toISOString().slice(0, 16);
+                } else {
+                    item.doneBy = '';
+                    item.doneOn = '';
+                }
+                render();
+            }
+
+            function resetAll() {
+                if (!confirm('🔄 Reset all items to Incomplete?')) return;
+                items.forEach(item => {
+                    item.status = 'incomplete';
+                    item.doneBy = '';
+                    item.doneOn = '';
+                });
+                render();
+            }
+
+            // ----- render -----
+            function render() {
+                const catFilter = filterCategory.value;
+                const riskFilter = filterRisk.value;
+                const statusFilter = filterStatus.value;
+                const userFilter = filterUser.value;
+                const searchTerm = searchInput.value.toLowerCase().trim();
+
+                const filtered = items.filter(item => {
+                    if (catFilter !== 'all' && item.category !== catFilter) return false;
+                    if (riskFilter !== 'all' && item.risk !== riskFilter) return false;
+                    if (statusFilter !== 'all' && item.status !== statusFilter) return false;
+                    if (userFilter !== 'all' && item.doneBy !== userFilter) return false;
+                    if (searchTerm) {
+                        const haystack = (item.category + item.criteria + item.description + item.risk + item
+                            .phase + item.doneBy).toLowerCase();
+                        if (!haystack.includes(searchTerm)) return false;
+                    }
+                    return true;
+                });
+
+                tbody.innerHTML = '';
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `
+                            <tr class="empty-row">
+                                <td colspan="10">
+                                    <span class="big-emoji">🔍</span>
+                                    No items match your filters
+                                </td>
+                            </tr>`;
+                } else {
+                    filtered.forEach(item => {
+                        const tr = document.createElement('tr');
+                        const stClass = statusClass(item.status);
+                        const stLabel = getStatusLabel(item.status);
+                        const stEmoji = getStatusEmoji(item.status);
+                        const doneOnDisplay = item.doneOn ? formatDateTime(item.doneOn) : '';
+                        const catEmoji = getCategoryEmoji(item.category);
+                        const catClass = getCategoryClass(item.category);
+                        const riskEmoji = getRiskEmoji(item.risk);
+
+                        tr.innerHTML = `
+                                <td><span class="category-badge ${catClass}">${catEmoji} ${item.category}</span></td>
+                                <td><strong>${item.criteria}</strong></td>
+                                <td>${item.description}</td>
+                                <td><span class="risk-tag ${riskClass(item.risk)}">${riskEmoji} ${item.risk}</span></td>
+                                <td>${automationIcon(item.automation)}</td>
+                                <td><span class="phase-tag">${item.phase}</span></td>
+                                <td>
+                                    <div class="status-toggle ${stClass}" data-id="${item.id}" role="button" tabindex="0">
+                                        <span class="status-emoji">${stEmoji}</span>
+                                        <span>${stLabel}</span>
+                                        <span class="toggle-icon"><i class="fas ${stClass === 'complete' ? 'fa-check' : stClass === 'inprogress' ? 'fa-spinner' : 'fa-times'}" aria-hidden="true"></i></span>
+                                    </div>
+                                </td>
+                                <td><span style="font-weight:600;">${item.doneBy || '—'}</span></td>
+                                <td><span style="font-size:0.7rem;color:#475569;">${doneOnDisplay || '—'}</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="edit-btn" data-id="${item.id}" aria-label="Edit">✏️</button>
+                                        <button class="delete-btn" data-id="${item.id}" aria-label="Delete">🗑️</button>
+                                    </div>
+                                </td>
+                            `;
+                        tbody.appendChild(tr);
+                    });
+                }
+
+                // attach events
+                document.querySelectorAll('.status-toggle').forEach(el => {
+                    el.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        if (id) toggleStatus(id);
+                    });
+                    el.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            const id = this.getAttribute('data-id');
+                            if (id) toggleStatus(id);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.edit-btn').forEach(el => {
+                    el.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        openEditModal(id);
+                    });
+                });
+
+                document.querySelectorAll('.delete-btn').forEach(el => {
+                    el.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        deleteItem(id);
+                    });
+                });
+
+                // stats
+                const total = items.length;
+                const complete = items.filter(it => it.status === 'complete').length;
+                const inprogress = items.filter(it => it.status === 'inprogress').length;
+                const incomplete = items.filter(it => it.status === 'incomplete').length;
+                const percent = total === 0 ? 0 : Math.round((complete / total) * 100);
+
+                completeSpan.textContent = complete;
+                progressSpan.textContent = inprogress;
+                incompleteSpan.textContent = incomplete;
+                totalSpan.textContent = total;
+                progressFill.style.width = percent + '%';
+                percentLabel.textContent = percent + '%';
+
+                const progressBar = document.querySelector('.progress-bar-bg');
+                if (progressBar) progressBar.setAttribute('aria-valuenow', percent);
+
+                updateUserFilter();
+            }
+
+            // ----- Modal -----
+            function openAddModal() {
+                modalTitleText.textContent = 'Add Item';
+                editId.value = '';
+                formCategory.value = 'Architecture & Design';
+                formCriteria.value = '';
+                formDescription.value = '';
+                formRisk.value = 'Medium';
+                formPhase.value = 'Code Review';
+                formAutomation.value = 'No';
+                formDoneBy.value = globalUser.value.trim() || 'Tester';
+                formDoneOn.value = '';
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => formCriteria.focus(), 100);
+            }
+
+            function openEditModal(id) {
+                const item = items.find(it => it.id === id);
+                if (!item) return;
+                modalTitleText.textContent = 'Edit Item';
+                editId.value = id;
+                formCategory.value = item.category;
+                formCriteria.value = item.criteria;
+                formDescription.value = item.description;
+                formRisk.value = item.risk;
+                formPhase.value = item.phase;
+                formAutomation.value = item.automation;
+                formDoneBy.value = item.doneBy || '';
+                formDoneOn.value = item.doneOn || '';
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => formCriteria.focus(), 100);
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function saveModal() {
+                const id = editId.value;
+                const data = {
+                    category: formCategory.value,
+                    criteria: formCriteria.value.trim() || '📌 Untitled',
+                    description: formDescription.value.trim(),
+                    risk: formRisk.value,
+                    phase: formPhase.value.trim() || 'Code Review',
+                    automation: formAutomation.value,
+                    doneBy: formDoneBy.value.trim(),
+                    doneOn: formDoneOn.value
+                };
+
+                if (data.doneBy && data.doneOn) {
+                    data.status = 'complete';
+                } else if (data.doneBy || data.doneOn) {
+                    data.status = 'inprogress';
+                } else {
+                    data.status = 'incomplete';
+                }
+
+                if (id) {
+                    if (data.status !== 'complete') {
+                        data.doneBy = '';
+                        data.doneOn = '';
+                    }
+                    updateItem(id, data);
+                } else {
+                    if (data.status === 'complete' && !data.doneBy) {
+                        data.doneBy = globalUser.value.trim() || 'Tester';
+                    }
+                    if (data.status === 'complete' && !data.doneOn) {
+                        data.doneOn = new Date().toISOString().slice(0, 16);
+                    }
+                    addItem(data);
+                }
+                closeModal();
+            }
+
+            // ----- Events -----
+            filterCategory.addEventListener('change', render);
+            filterRisk.addEventListener('change', render);
+            filterStatus.addEventListener('change', render);
+            filterUser.addEventListener('change', render);
+            searchInput.addEventListener('input', render);
+            clearSearch.addEventListener('click', function() {
+                searchInput.value = '';
+                render();
+                searchInput.focus();
+            });
+            resetAllBtn.addEventListener('click', resetAll);
+            addItemBtn.addEventListener('click', openAddModal);
+            modalCancel.addEventListener('click', closeModal);
+            modalSave.addEventListener('click', saveModal);
+
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            render();
+        })();
+    </script>
+
+</body>
+</html>
