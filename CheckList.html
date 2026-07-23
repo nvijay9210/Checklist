@@ -1,0 +1,2073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📊 App Matrix · User Names on Cells</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f2f5;
+            font-family: 'Segoe UI', 'Calibri', 'Arial', sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .excel-container {
+            max-width: 100%;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* User header bar */
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #e8f0fe, #f0f2f5);
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .user-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-header .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #1a73e8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .user-header .user-name {
+            font-weight: 600;
+            font-size: 15px;
+            color: #24292f;
+        }
+
+        .user-header .user-role {
+            font-size: 12px;
+            color: #57606a;
+        }
+
+        .user-header .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .user-header .user-controls input {
+            padding: 4px 12px;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+            font-size: 13px;
+            outline: none;
+            width: 160px;
+        }
+
+        .user-header .user-controls input:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        .user-header .user-controls .btn-set-user {
+            padding: 4px 14px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.15s;
+        }
+
+        .user-header .user-controls .btn-set-user:hover {
+            background: #1557b0;
+        }
+
+        .user-header .last-updated {
+            font-size: 12px;
+            color: #57606a;
+        }
+
+        .user-header .last-updated span {
+            font-weight: 600;
+            color: #24292f;
+        }
+
+        /* Excel-style toolbar */
+        .excel-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            align-items: center;
+        }
+
+        .excel-toolbar .btn {
+            padding: 5px 14px;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+            background: white;
+            font-size: 13px;
+            font-weight: 600;
+            color: #24292f;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .excel-toolbar .btn:hover {
+            background: #f0f2f5;
+            border-color: #8b949e;
+        }
+
+        .excel-toolbar .btn-primary {
+            background: #1a73e8;
+            color: white;
+            border-color: #1a73e8;
+        }
+
+        .excel-toolbar .btn-primary:hover {
+            background: #1557b0;
+            border-color: #1557b0;
+        }
+
+        .excel-toolbar .btn-success {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .excel-toolbar .btn-success:hover {
+            background: #218838;
+            border-color: #218838;
+        }
+
+        .excel-toolbar .btn-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .excel-toolbar .btn-danger:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        .excel-toolbar .btn-purple {
+            color: #7c3aed;
+            border-color: #7c3aed;
+        }
+
+        .excel-toolbar .btn-purple:hover {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .excel-toolbar .separator {
+            width: 1px;
+            height: 28px;
+            background: #d0d7de;
+            margin: 0 4px;
+        }
+
+        .excel-toolbar .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .excel-toolbar .filter-group select,
+        .excel-toolbar .filter-group input {
+            padding: 4px 10px;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+            font-size: 13px;
+            background: white;
+            outline: none;
+        }
+
+        .excel-toolbar .filter-group select:focus,
+        .excel-toolbar .filter-group input:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        .excel-toolbar .filter-group input {
+            min-width: 140px;
+        }
+
+        /* Excel table wrapper */
+        .excel-table-wrapper {
+            overflow: auto;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            background: white;
+            max-height: 70vh;
+        }
+
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 800px;
+            table-layout: fixed;
+        }
+
+        .excel-table th {
+            background: #f8f9fa;
+            color: #24292f;
+            font-weight: 700;
+            padding: 8px 10px;
+            border: 1px solid #d0d7de;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            white-space: nowrap;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .excel-table th.app-header {
+            text-align: center;
+            background: #e8f0fe;
+            border-color: #c5d5e8;
+            min-width: 80px;
+        }
+
+        .excel-table th.app-header .app-icon {
+            font-size: 18px;
+            display: block;
+        }
+
+        .excel-table th.app-header .app-name {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .excel-table th.actions-header {
+            text-align: center;
+            min-width: 80px;
+            background: #f8f9fa;
+        }
+
+        .excel-table td {
+            padding: 6px 10px;
+            border: 1px solid #e1e4e8;
+            vertical-align: middle;
+            background: white;
+            transition: background 0.1s;
+        }
+
+        .excel-table tr:hover td {
+            background: #f6f8fa;
+        }
+
+        .excel-table .category-cell {
+            font-weight: 600;
+            font-size: 12px;
+            padding: 6px 10px;
+        }
+
+        .excel-table .category-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .cat-architecture {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .cat-database {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .cat-security {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .cat-api {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .cat-frontend {
+            background: #fce7f3;
+            color: #9d174d;
+        }
+        .cat-code {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+        .cat-devops {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+        .cat-default {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .excel-table .criteria-cell {
+            font-weight: 500;
+            min-width: 160px;
+        }
+
+        .excel-table .criteria-cell .description {
+            display: block;
+            font-weight: 400;
+            font-size: 11px;
+            color: #57606a;
+            margin-top: 2px;
+        }
+
+        .excel-table .criteria-cell .updated-by {
+            display: block;
+            font-weight: 400;
+            font-size: 10px;
+            color: #8b949e;
+            margin-top: 2px;
+            font-style: italic;
+        }
+
+        .excel-table .risk-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .risk-critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .risk-high {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .risk-medium {
+            background: #dbeafe;
+            color: #1e4b8f;
+        }
+        .risk-low {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .excel-table .check-cell {
+            text-align: center;
+            cursor: pointer;
+            padding: 4px 2px;
+            user-select: none;
+            transition: all 0.1s;
+            width: 70px;
+            min-width: 70px;
+            position: relative;
+            vertical-align: middle;
+        }
+
+        .excel-table .check-cell:hover {
+            background: #e8f0fe;
+            transform: scale(1.02);
+            z-index: 5;
+        }
+
+        .excel-table .check-cell .cell-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+        }
+
+        .excel-table .check-cell .cell-status {
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        .excel-table .check-cell .cell-status.checked {
+            color: #28a745;
+        }
+
+        .excel-table .check-cell .cell-status.unchecked {
+            color: #d0d7de;
+        }
+
+        .excel-table .check-cell .cell-user {
+            font-size: 8px;
+            color: #57606a;
+            font-weight: 500;
+            line-height: 1.2;
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+
+        .excel-table .check-cell .cell-user.me {
+            color: #28a745;
+            font-weight: 700;
+        }
+
+        .excel-table .check-cell .cell-user.other {
+            color: #1a73e8;
+        }
+
+        .excel-table .check-cell .cell-user.system {
+            color: #8b949e;
+            font-style: italic;
+        }
+
+        .excel-table .check-cell.has-update {
+            border-bottom: 2px solid #1a73e8;
+        }
+
+        .excel-table .check-cell.updated-by-me {
+            border-bottom: 2px solid #28a745;
+            background: #f0faf0;
+        }
+
+        .excel-table .check-cell.updated-by-me:hover {
+            background: #e0f5e0;
+        }
+
+        .excel-table .actions-cell {
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .excel-table .actions-cell button {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            padding: 2px 6px;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.15s;
+            color: #57606a;
+        }
+
+        .excel-table .actions-cell button:hover {
+            background: #f0f2f5;
+        }
+
+        .excel-table .actions-cell .edit-btn:hover {
+            color: #1a73e8;
+            background: #e8f0fe;
+        }
+
+        .excel-table .actions-cell .delete-btn:hover {
+            color: #dc3545;
+            background: #fee2e2;
+        }
+
+        .excel-table .empty-row td {
+            padding: 40px 20px;
+            text-align: center;
+            color: #8b949e;
+            font-size: 15px;
+        }
+
+        .excel-table .empty-row .big-icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Excel footer */
+        .excel-footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 4px 0;
+            font-size: 12px;
+            color: #57606a;
+            border-top: 1px solid #d0d7de;
+            margin-top: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .excel-footer .count {
+            font-weight: 600;
+            color: #24292f;
+        }
+
+        /* MODAL - Excel style */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 8px;
+            max-width: 580px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            animation: modalSlide 0.2s ease;
+        }
+
+        @keyframes modalSlide {
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-box .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-box .modal-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #24292f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-box .modal-header .close-btn {
+            border: none;
+            background: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #8b949e;
+            padding: 0 6px;
+        }
+
+        .modal-box .modal-header .close-btn:hover {
+            color: #24292f;
+        }
+
+        .modal-box .modal-body {
+            padding: 20px 24px 16px;
+        }
+
+        .modal-box .form-group {
+            margin-bottom: 14px;
+        }
+
+        .modal-box .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            color: #24292f;
+            margin-bottom: 4px;
+        }
+
+        .modal-box .form-group input,
+        .modal-box .form-group select,
+        .modal-box .form-group textarea {
+            width: 100%;
+            padding: 7px 12px;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: inherit;
+            transition: border 0.15s;
+            background: white;
+        }
+
+        .modal-box .form-group input:focus,
+        .modal-box .form-group select:focus,
+        .modal-box .form-group textarea:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        .modal-box .form-group textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .modal-box .app-check-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 6px;
+            padding: 8px 0;
+        }
+
+        .modal-box .app-check-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .modal-box .app-check-item:hover {
+            background: #f0f2f5;
+        }
+
+        .modal-box .app-check-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #1a73e8;
+            cursor: pointer;
+        }
+
+        .modal-box .modal-footer {
+            padding: 12px 24px 20px;
+            border-top: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .modal-box .modal-footer button {
+            padding: 7px 20px;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: white;
+            color: #24292f;
+        }
+
+        .modal-box .modal-footer button:hover {
+            background: #f0f2f5;
+        }
+
+        .modal-box .modal-footer .btn-save {
+            background: #1a73e8;
+            color: white;
+            border-color: #1a73e8;
+        }
+
+        .modal-box .modal-footer .btn-save:hover {
+            background: #1557b0;
+            border-color: #1557b0;
+        }
+
+        /* App management table inside modal */
+        .app-mgmt-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin: 4px 0 12px;
+        }
+
+        .app-mgmt-table th {
+            background: #f8f9fa;
+            padding: 6px 10px;
+            border: 1px solid #d0d7de;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #57606a;
+        }
+
+        .app-mgmt-table td {
+            padding: 6px 10px;
+            border: 1px solid #d0d7de;
+            vertical-align: middle;
+        }
+
+        .app-mgmt-table .app-icon-cell {
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .app-mgmt-table .app-actions {
+            display: flex;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .app-mgmt-table .app-actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 2px 8px;
+            font-size: 13px;
+            border-radius: 4px;
+            transition: all 0.15s;
+            color: #57606a;
+        }
+
+        .app-mgmt-table .app-actions .edit-app-btn:hover {
+            color: #1a73e8;
+            background: #e8f0fe;
+        }
+
+        .app-mgmt-table .app-actions .delete-app-btn:hover {
+            color: #dc3545;
+            background: #fee2e2;
+        }
+
+        .add-app-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .add-app-row input,
+        .add-app-row select {
+            padding: 5px 10px;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+            font-size: 13px;
+            background: white;
+        }
+
+        .add-app-row input:focus,
+        .add-app-row select:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        .add-app-row input {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .add-app-row .btn-add-app {
+            padding: 5px 16px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.15s;
+        }
+
+        .add-app-row .btn-add-app:hover {
+            background: #218838;
+        }
+
+        /* Scrollbar */
+        .excel-table-wrapper::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .excel-table-wrapper::-webkit-scrollbar-track {
+            background: #f0f2f5;
+            border-radius: 4px;
+        }
+
+        .excel-table-wrapper::-webkit-scrollbar-thumb {
+            background: #d0d7de;
+            border-radius: 4px;
+        }
+
+        .excel-table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #b0b8c0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .excel-container {
+                padding: 12px;
+            }
+            .user-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .user-header .user-controls {
+                flex-wrap: wrap;
+            }
+            .user-header .user-controls input {
+                flex: 1;
+                width: auto;
+            }
+            .excel-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .excel-toolbar .filter-group {
+                flex-wrap: wrap;
+            }
+            .excel-toolbar .filter-group input {
+                min-width: 100px;
+                flex: 1;
+            }
+            .excel-table {
+                font-size: 12px;
+                min-width: 650px;
+            }
+            .excel-table th,
+            .excel-table td {
+                padding: 4px 6px;
+            }
+            .excel-table .check-cell {
+                min-width: 55px;
+                width: 55px;
+            }
+            .excel-table .check-cell .cell-user {
+                font-size: 7px;
+                max-width: 45px;
+            }
+            .modal-box {
+                margin: 10px;
+            }
+            .modal-box .modal-body {
+                padding: 16px;
+            }
+            .modal-box .app-check-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .excel-table {
+                font-size: 11px;
+                min-width: 550px;
+            }
+            .excel-table th.app-header .app-icon {
+                font-size: 15px;
+            }
+            .excel-table th.app-header .app-name {
+                font-size: 9px;
+            }
+            .excel-table .check-cell {
+                font-size: 15px;
+                min-width: 45px;
+                width: 45px;
+                padding: 2px 1px;
+            }
+            .excel-table .check-cell .cell-user {
+                font-size: 6px;
+                max-width: 35px;
+            }
+            .excel-toolbar .btn {
+                font-size: 12px;
+                padding: 4px 10px;
+            }
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Legend for cell updates */
+        .legend {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            padding: 4px 0 8px 0;
+            font-size: 11px;
+            color: #57606a;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .legend-color.me {
+            background: #28a745;
+        }
+
+        .legend-color.other {
+            background: #1a73e8;
+        }
+
+        .legend-color.system {
+            background: #8b949e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="excel-container">
+        <!-- User Header -->
+        <div class="user-header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">👤</div>
+                <div>
+                    <div class="user-name" id="displayUserName">Guest User</div>
+                    <div class="user-role" id="displayUserRole">Click to set your name</div>
+                </div>
+            </div>
+            <div class="user-controls">
+                <input type="text" id="userNameInput" placeholder="Enter your name..." maxlength="30" />
+                <button class="btn-set-user" id="setUserBtn">Set User</button>
+                <span class="last-updated">🕐 Last action: <span id="lastActionTime">Never</span></span>
+            </div>
+        </div>
+
+        <!-- Excel Toolbar -->
+        <div class="excel-toolbar">
+            <button class="btn btn-primary" id="addItemBtn">
+                <i class="fas fa-plus"></i> Add Item
+            </button>
+            <button class="btn btn-purple" id="manageAppsBtn">
+                <i class="fas fa-th"></i> Manage Apps
+            </button>
+            <div class="separator"></div>
+            <button class="btn btn-success" id="exportExcelBtn">
+                <i class="fas fa-file-excel"></i> Export .xlsx
+            </button>
+            <div class="separator"></div>
+            <button class="btn btn-danger" id="resetAllBtn">
+                <i class="fas fa-undo"></i> Reset Checks
+            </button>
+
+            <div class="separator"></div>
+
+            <div class="filter-group">
+                <select id="filterCategory">
+                    <option value="all">All Categories</option>
+                    <option value="Architecture & Design">🏛️ Architecture</option>
+                    <option value="Database & Data Management">🗄️ Database</option>
+                    <option value="Security">🔒 Security</option>
+                    <option value="API & Integration">🔗 API</option>
+                    <option value="Frontend & User Experience (UX)">🎨 Frontend</option>
+                    <option value="Code Quality & Standards">📝 Code</option>
+                    <option value="DevOps & Deployment">🚀 DevOps</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <select id="filterRisk">
+                    <option value="all">All Risks</option>
+                    <option value="Critical">🔴 Critical</option>
+                    <option value="High">🟠 High</option>
+                    <option value="Medium">🟡 Medium</option>
+                    <option value="Low">🟢 Low</option>
+                </select>
+            </div>
+
+            <div class="filter-group" style="flex:1;min-width:140px;">
+                <input type="text" id="searchInput" placeholder="🔍 Search items..." />
+                <button class="btn" id="clearSearch" style="padding:4px 8px;border:none;background:none;color:#8b949e;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <span>📌 Cell updated by:</span>
+            <span class="legend-item">
+                <span class="legend-color me"></span>
+                <span>You (green name)</span>
+            </span>
+            <span class="legend-item">
+                <span class="legend-color other"></span>
+                <span>Other user (blue name)</span>
+            </span>
+            <span class="legend-item">
+                <span class="legend-color system"></span>
+                <span>System (gray name)</span>
+            </span>
+            <span style="margin-left:auto;font-size:10px;color:#8b949e;">Click ✅/❌ to toggle · Username shown on each cell</span>
+        </div>
+
+        <!-- Excel Table -->
+        <div class="excel-table-wrapper">
+            <table class="excel-table" id="mainTable">
+                <thead id="tableHead">
+                    <tr>
+                        <th style="width:13%;">Category</th>
+                        <th style="width:23%;">Checklist Item</th>
+                        <th style="width:10%;">Risk</th>
+                        <!-- App columns injected -->
+                        <th class="actions-header" style="width:10%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Excel Footer -->
+        <div class="excel-footer">
+            <span>📊 <span class="count" id="rowCount">0</span> items · <span class="count" id="appCount">0</span> applications</span>
+            <span>💡 Click ✅ / ❌ to toggle · Username shown on each cell</span>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast">✅ Excel file exported successfully!</div>
+
+    <!-- MODAL: Add/Edit Item -->
+    <div class="modal-overlay" id="itemModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2><span id="modalIcon">✏️</span> <span id="modalTitleText">Add Item</span></h2>
+                <button class="close-btn" id="modalCloseBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editId" />
+
+                <div class="form-group">
+                    <label>📂 Category</label>
+                    <select id="formCategory">
+                        <option value="Architecture & Design">🏛️ Architecture & Design</option>
+                        <option value="Database & Data Management">🗄️ Database & Data Management</option>
+                        <option value="Security">🔒 Security</option>
+                        <option value="API & Integration">🔗 API & Integration</option>
+                        <option value="Frontend & User Experience (UX)">🎨 Frontend & UX</option>
+                        <option value="Code Quality & Standards">📝 Code Quality & Standards</option>
+                        <option value="DevOps & Deployment">🚀 DevOps & Deployment</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📌 Checklist Item</label>
+                    <input type="text" id="formCriteria" placeholder="e.g., JWT Authentication" />
+                </div>
+
+                <div class="form-group">
+                    <label>📝 Description</label>
+                    <textarea id="formDescription" rows="2" placeholder="Optional description..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>⚠️ Risk Level</label>
+                    <select id="formRisk">
+                        <option value="Critical">🔴 Critical</option>
+                        <option value="High">🟠 High</option>
+                        <option value="Medium">🟡 Medium</option>
+                        <option value="Low">🟢 Low</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📱 Applicable Apps</label>
+                    <div class="app-check-grid" id="appCheckGrid"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modalCancelBtn">Cancel</button>
+                <button class="btn-save" id="modalSaveBtn">💾 Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Manage Applications -->
+    <div class="modal-overlay" id="appMgmtModal">
+        <div class="modal-box" style="max-width:640px;">
+            <div class="modal-header">
+                <h2>📱 Application Management</h2>
+                <button class="close-btn" id="appMgmtCloseBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="app-mgmt-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40%;">Name</th>
+                            <th style="width:20%;">Icon</th>
+                            <th style="width:40%;text-align:right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appMgmtBody"></tbody>
+                </table>
+
+                <div class="add-app-row">
+                    <input type="text" id="newAppMgmtName" placeholder="Application Name" />
+                    <select id="newAppMgmtIcon">
+                        <option value="🏦">🏦</option>
+                        <option value="🦷">🦷</option>
+                        <option value="👥">👥</option>
+                        <option value="📦">📦</option>
+                        <option value="📊">📊</option>
+                        <option value="🚌">🚌</option>
+                        <option value="🏛️">🏛️</option>
+                        <option value="💼">💼</option>
+                        <option value="📱">📱</option>
+                        <option value="🖥️">🖥️</option>
+                        <option value="🔧">🔧</option>
+                    </select>
+                    <button class="btn-add-app" id="addAppMgmtBtn">➕ Add</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="appMgmtDoneBtn">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ----- USER STATE -----
+            let currentUser = {
+                name: 'Guest User',
+                avatar: '👤'
+            };
+
+            // Load user from localStorage
+            function loadUser() {
+                const saved = localStorage.getItem('appMatrixUser');
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        currentUser = parsed;
+                        updateUserDisplay();
+                    } catch (e) {
+                        console.warn('Failed to load user');
+                    }
+                }
+            }
+
+            function saveUser() {
+                localStorage.setItem('appMatrixUser', JSON.stringify(currentUser));
+            }
+
+            function updateUserDisplay() {
+                document.getElementById('displayUserName').textContent = currentUser.name;
+                document.getElementById('userAvatar').textContent = currentUser.avatar || '👤';
+                document.getElementById('displayUserRole').textContent = currentUser.name === 'Guest User' ?
+                    'Click to set your name' :
+                    `Working as ${currentUser.name}`;
+            }
+
+            function setUserName(name) {
+                if (!name.trim()) return;
+                const avatar = name.trim().charAt(0).toUpperCase();
+                currentUser.name = name.trim();
+                currentUser.avatar = avatar;
+                saveUser();
+                updateUserDisplay();
+                document.getElementById('userNameInput').value = '';
+                showToast('👤 User updated to: ' + currentUser.name);
+            }
+
+            function getCurrentUser() {
+                return currentUser.name;
+            }
+
+            function updateLastActionTime() {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                document.getElementById('lastActionTime').textContent = timeStr + ' by ' + getCurrentUser();
+            }
+
+            // ----- TOAST -----
+            function showToast(message) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            }
+
+            // ----- APP STORE (master data) -----
+            let appStore = [
+                { id: 1, name: 'GoldLoan', icon: '🏦', color: '#f59e0b' },
+                { id: 2, name: 'Dental', icon: '🦷', color: '#3b82f6' },
+                { id: 3, name: 'Kulasamy', icon: '🏛️', color: '#8b5cf6' },
+                { id: 4, name: 'HRMS', icon: '👥', color: '#ec4899' },
+                { id: 5, name: 'Asset', icon: '📦', color: '#22c55e' },
+                { id: 6, name: 'CRM', icon: '📊', color: '#f97316' }
+            ];
+            let nextAppId = 7;
+
+            // ----- CHECKLIST ITEMS (store app IDs with cell-level tracking) -----
+            let items = [];
+            let nextItemId = 1;
+
+            // ----- Helpers -----
+            function getAppName(id) { const a = appStore.find(app => app.id === id); return a ? a.name : '?'; }
+
+            function getAppIcon(id) { const a = appStore.find(app => app.id === id); return a ? a.icon : '❓'; }
+
+            function getAppIdByName(name) {
+                const found = appStore.find(a => a.name === name);
+                return found ? found.id : null;
+            }
+
+            function getCategoryEmoji(cat) {
+                const map = { 'Architecture & Design': '🏛️', 'Database & Data Management': '🗄️', 'Security': '🔒',
+                    'API & Integration': '🔗', 'Frontend & User Experience (UX)': '🎨',
+                    'Code Quality & Standards': '📝', 'DevOps & Deployment': '🚀' };
+                return map[cat] || '📂';
+            }
+
+            function getCategoryClass(cat) {
+                const map = { 'Architecture & Design': 'cat-architecture', 'Database & Data Management': 'cat-database',
+                    'Security': 'cat-security', 'API & Integration': 'cat-api',
+                    'Frontend & User Experience (UX)': 'cat-frontend', 'Code Quality & Standards': 'cat-code',
+                    'DevOps & Deployment': 'cat-devops' };
+                return map[cat] || 'cat-default';
+            }
+
+            function riskClass(r) {
+                const map = { 'Critical': 'risk-critical', 'High': 'risk-high', 'Medium': 'risk-medium',
+                    'Low': 'risk-low' };
+                return map[r] || 'risk-medium';
+            }
+
+            // ----- Build default data with cell-level tracking -----
+            function buildDefaultItems() {
+                const raw = [
+                    { category: 'Security', criteria: '🔐 JWT Authentication',
+                        description: 'OAuth2 / JWT with refresh tokens', risk: 'Critical',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'Security', criteria: '🔐 Role-Based Access Control',
+                        description: 'RBAC for admin, staff, customer roles', risk: 'Critical',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'Security', criteria: '🔐 Data Encryption at Rest',
+                        description: 'AES-256 encryption for sensitive data', risk: 'Critical',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'Security', criteria: '🔐 SQL Injection & XSS Prevention',
+                        description: 'Parameterized queries, input sanitization', risk: 'Critical',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'API & Integration', criteria: '🔗 Gold Price API',
+                        description: 'Real-time gold price integration with fallback', risk: 'High',
+                        appNames: ['GoldLoan'] },
+                    { category: 'API & Integration', criteria: '🔗 Payment Gateway',
+                        description: 'PCI-DSS compliant payment integration', risk: 'Critical',
+                        appNames: ['GoldLoan', 'Kulasamy'] },
+                    { category: 'API & Integration', criteria: '🔗 Insurance Claims API',
+                        description: 'Integration with insurance providers', risk: 'High', appNames: ['Dental'] },
+                    { category: 'API & Integration', criteria: '🔗 KYC Verification',
+                        description: 'Third-party KYC for customer verification', risk: 'High',
+                        appNames: ['Kulasamy', 'GoldLoan'] },
+                    { category: 'Database & Data Management', criteria: '🗄️ Loan Schema Design',
+                        description: 'Normalized tables for loans, repayments, interest', risk: 'High',
+                        appNames: ['GoldLoan'] },
+                    { category: 'Database & Data Management', criteria: '🦷 Patient Records Schema',
+                        description: 'Patient history, appointments, treatment plans', risk: 'Medium',
+                        appNames: ['Dental'] },
+                    { category: 'Database & Data Management', criteria: '👥 Customer 360 Profile',
+                        description: 'Customer transactions, preferences, history', risk: 'Medium',
+                        appNames: ['Kulasamy', 'GoldLoan'] },
+                    { category: 'Database & Data Management', criteria: '📌 Audit Fields',
+                        description: 'created_by, created_time, modified_by, modified_time', risk: 'Medium',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'Database & Data Management', criteria: '🗄️ Normalization & Constraints',
+                        description: '3NF, foreign keys, unique constraints', risk: 'High',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'Frontend & User Experience (UX)', criteria: '♿ Accessibility (WCAG 2.1)',
+                        description: 'Keyboard, screen reader, color contrast', risk: 'Medium',
+                        appNames: ['Dental', 'GoldLoan'] },
+                    { category: 'Frontend & User Experience (UX)', criteria: '⚡ Core Web Vitals',
+                        description: 'LCP, FID, CLS thresholds met', risk: 'High', appNames: ['Dental',
+                        'GoldLoan'] },
+                    { category: 'Frontend & User Experience (UX)', criteria: '📱 Responsive Design',
+                        description: 'Mobile-first, tablet, desktop views', risk: 'Medium',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy'] },
+                    { category: 'Code Quality & Standards', criteria: '📝 Coding Standards',
+                        description: 'Linter + formatter enforced in CI', risk: 'Low',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'Code Quality & Standards', criteria: '🧪 Unit/Integration Tests',
+                        description: 'Coverage >80%', risk: 'High',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'DevOps & Deployment', criteria: '⚙️ CI/CD Pipeline',
+                        description: 'Automated build, test, deploy', risk: 'High',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'DevOps & Deployment', criteria: '🔧 Environment Variables',
+                        description: 'No hard-coding, all env config', risk: 'High',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'DevOps & Deployment', criteria: '💚 Health Checks',
+                        description: '/health or /status endpoint', risk: 'Medium',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] },
+                    { category: 'Architecture & Design', criteria: '🏛️ Microservices Separation',
+                        description: 'Domain-driven design per service', risk: 'High',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy'] },
+                    { category: 'Architecture & Design', criteria: '🔗 API Design Standards',
+                        description: 'RESTful / GraphQL best practices', risk: 'Medium',
+                        appNames: ['GoldLoan', 'Dental', 'Kulasamy', 'HRMS', 'Asset', 'CRM'] }
+                ];
+                return raw.map(d => {
+                    const appIds = d.appNames.map(n => getAppIdByName(n)).filter(id => id !== null);
+                    // Create cell-level tracking for each app
+                    const cellUpdates = {};
+                    appIds.forEach(appId => {
+                        cellUpdates[appId] = {
+                            updatedBy: 'System',
+                            updatedAt: new Date().toISOString()
+                        };
+                    });
+                    return {
+                        id: 'item-' + (nextItemId++),
+                        category: d.category,
+                        criteria: d.criteria,
+                        description: d.description || '',
+                        risk: d.risk,
+                        apps: appIds,
+                        cellUpdates: cellUpdates,
+                        updatedBy: 'System',
+                        updatedAt: new Date().toISOString()
+                    };
+                });
+            }
+
+            function initData() {
+                items = buildDefaultItems();
+                updateLastActionTime();
+            }
+            initData();
+
+            // ----- DOM refs -----
+            const tbody = document.getElementById('tableBody');
+            const thead = document.getElementById('tableHead');
+            const filterCategory = document.getElementById('filterCategory');
+            const filterRisk = document.getElementById('filterRisk');
+            const searchInput = document.getElementById('searchInput');
+            const clearSearch = document.getElementById('clearSearch');
+            const resetAllBtn = document.getElementById('resetAllBtn');
+            const addItemBtn = document.getElementById('addItemBtn');
+            const manageAppsBtn = document.getElementById('manageAppsBtn');
+            const exportExcelBtn = document.getElementById('exportExcelBtn');
+            const rowCount = document.getElementById('rowCount');
+            const appCount = document.getElementById('appCount');
+
+            // User controls
+            const userNameInput = document.getElementById('userNameInput');
+            const setUserBtn = document.getElementById('setUserBtn');
+
+            // Item modal
+            const itemModal = document.getElementById('itemModal');
+            const modalTitleText = document.getElementById('modalTitleText');
+            const modalIcon = document.getElementById('modalIcon');
+            const editId = document.getElementById('editId');
+            const formCategory = document.getElementById('formCategory');
+            const formCriteria = document.getElementById('formCriteria');
+            const formDescription = document.getElementById('formDescription');
+            const formRisk = document.getElementById('formRisk');
+            const appCheckGrid = document.getElementById('appCheckGrid');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const modalCancelBtn = document.getElementById('modalCancelBtn');
+            const modalSaveBtn = document.getElementById('modalSaveBtn');
+
+            // App Mgmt modal
+            const appMgmtModal = document.getElementById('appMgmtModal');
+            const appMgmtBody = document.getElementById('appMgmtBody');
+            const newAppMgmtName = document.getElementById('newAppMgmtName');
+            const newAppMgmtIcon = document.getElementById('newAppMgmtIcon');
+            const addAppMgmtBtn = document.getElementById('addAppMgmtBtn');
+            const appMgmtCloseBtn = document.getElementById('appMgmtCloseBtn');
+            const appMgmtDoneBtn = document.getElementById('appMgmtDoneBtn');
+
+            // ----- RENDER -----
+            function render() {
+                const catFilter = filterCategory.value;
+                const riskFilter = filterRisk.value;
+                const searchTerm = searchInput.value.toLowerCase().trim();
+
+                const filtered = items.filter(item => {
+                    if (catFilter !== 'all' && item.category !== catFilter) return false;
+                    if (riskFilter !== 'all' && item.risk !== riskFilter) return false;
+                    if (searchTerm) {
+                        const haystack = (item.category + item.criteria + item.description + item.risk + item.apps.map(
+                            id => getAppName(id)).join(' ') + item.updatedBy).toLowerCase();
+                        if (!haystack.includes(searchTerm)) return false;
+                    }
+                    return true;
+                });
+
+                // Build header
+                let headerHtml = `
+                    <tr>
+                        <th>Category</th>
+                        <th>Checklist Item</th>
+                        <th>Risk</th>
+                `;
+                appStore.forEach(app => {
+                    headerHtml +=
+                        `<th class="app-header"><span class="app-icon">${app.icon}</span><span class="app-name">${app.name}</span></th>`;
+                });
+                headerHtml += `<th class="actions-header">Actions</th></tr>`;
+                thead.innerHTML = headerHtml;
+
+                // Build body
+                tbody.innerHTML = '';
+                if (filtered.length === 0) {
+                    tbody.innerHTML =
+                        `<tr class="empty-row"><td colspan="${3 + appStore.length + 1}"><span class="big-icon">🔍</span>No items match your filters</td></tr>`;
+                    rowCount.textContent = '0';
+                    appCount.textContent = appStore.length;
+                    return;
+                }
+
+                const currentUserName = getCurrentUser();
+
+                filtered.forEach(item => {
+                    const tr = document.createElement('tr');
+                    const catEmoji = getCategoryEmoji(item.category);
+                    const catClass = getCategoryClass(item.category);
+                    const riskCls = riskClass(item.risk);
+                    const isChecked = (appId) => item.apps.includes(appId);
+                    const updatedTime = item.updatedAt ? new Date(item.updatedAt).toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }) : '';
+
+                    let rowHtml = `
+                        <td class="category-cell"><span class="category-badge ${catClass}">${catEmoji} ${item.category}</span></td>
+                        <td class="criteria-cell">
+                            ${item.criteria}
+                            <span class="description">${item.description || ''}</span>
+                            <span class="updated-by">🕐 Updated ${updatedTime} by ${item.updatedBy || 'Unknown'}</span>
+                        </td>
+                        <td><span class="risk-badge ${riskCls}">${item.risk}</span></td>
+                    `;
+
+                    appStore.forEach(app => {
+                        const checked = isChecked(app.id);
+                        const cellUpdate = item.cellUpdates && item.cellUpdates[app.id];
+                        const cellUser = cellUpdate ? cellUpdate.updatedBy : (checked ? 'System' : '');
+                        const isMyUpdate = cellUser === currentUserName && cellUser !== 'System';
+                        const hasUpdate = cellUser && cellUser !== 'System';
+
+                        let cellClass = 'check-cell';
+                        if (checked) {
+                            cellClass += ' checked';
+                        } else {
+                            cellClass += ' unchecked';
+                        }
+                        if (hasUpdate) {
+                            cellClass += ' has-update';
+                            if (isMyUpdate) {
+                                cellClass += ' updated-by-me';
+                            }
+                        }
+
+                        // Determine user label class
+                        let userClass = 'cell-user';
+                        if (cellUser === 'System') {
+                            userClass += ' system';
+                        } else if (cellUser === currentUserName) {
+                            userClass += ' me';
+                        } else {
+                            userClass += ' other';
+                        }
+
+                        // Display username (truncate if too long)
+                        let displayUser = cellUser || '';
+                        if (displayUser.length > 12) {
+                            displayUser = displayUser.substring(0, 10) + '..';
+                        }
+
+                        rowHtml += `
+                            <td class="${cellClass}" data-id="${item.id}" data-appid="${app.id}" role="button" tabindex="0">
+                                <div class="cell-content">
+                                    <span class="cell-status ${checked ? 'checked' : 'unchecked'}">${checked ? '✅' : '❌'}</span>
+                                    ${cellUser ? `<span class="${userClass}">${displayUser}</span>` : ''}
+                                </div>
+                            </td>
+                        `;
+                    });
+
+                    rowHtml += `
+                        <td class="actions-cell">
+                            <button class="edit-btn" data-id="${item.id}" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button class="delete-btn" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    tr.innerHTML = rowHtml;
+                    tbody.appendChild(tr);
+                });
+
+                // Check cell events
+                document.querySelectorAll('.check-cell').forEach(el => {
+                    el.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        const appId = parseInt(this.getAttribute('data-appid'), 10);
+                        toggleAppCheck(id, appId);
+                    });
+                    el.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            const id = this.getAttribute('data-id');
+                            const appId = parseInt(this.getAttribute('data-appid'), 10);
+                            toggleAppCheck(id, appId);
+                        }
+                    });
+                });
+
+                // Edit/Delete events
+                document.querySelectorAll('.edit-btn').forEach(el => {
+                    el.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        openEditModal(id);
+                    });
+                });
+                document.querySelectorAll('.delete-btn').forEach(el => {
+                    el.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        deleteItem(id);
+                    });
+                });
+
+                rowCount.textContent = filtered.length;
+                appCount.textContent = appStore.length;
+                updateAppCheckGrid();
+            }
+
+            // ----- Toggle app check with cell-level tracking -----
+            function toggleAppCheck(itemId, appId) {
+                const item = items.find(it => it.id === itemId);
+                if (!item) return;
+
+                // Initialize cellUpdates if needed
+                if (!item.cellUpdates) {
+                    item.cellUpdates = {};
+                }
+
+                const idx = item.apps.indexOf(appId);
+                if (idx > -1) {
+                    item.apps.splice(idx, 1);
+                } else {
+                    item.apps.push(appId);
+                }
+
+                // Record who updated this specific cell
+                item.cellUpdates[appId] = {
+                    updatedBy: getCurrentUser(),
+                    updatedAt: new Date().toISOString()
+                };
+
+                item.updatedBy = getCurrentUser();
+                item.updatedAt = new Date().toISOString();
+                updateLastActionTime();
+                render();
+                showToast(`✅ Cell updated by ${getCurrentUser()}`);
+            }
+
+            // ----- CRUD items with user tracking -----
+            function addItem(data) {
+                // Initialize cell updates for selected apps
+                const cellUpdates = {};
+                (data.apps || []).forEach(appId => {
+                    cellUpdates[appId] = {
+                        updatedBy: getCurrentUser(),
+                        updatedAt: new Date().toISOString()
+                    };
+                });
+
+                const newItem = {
+                    id: 'item-' + (nextItemId++),
+                    category: data.category || 'Security',
+                    criteria: data.criteria || '📌 New Item',
+                    description: data.description || '',
+                    risk: data.risk || 'Medium',
+                    apps: data.apps || [],
+                    cellUpdates: cellUpdates,
+                    updatedBy: getCurrentUser(),
+                    updatedAt: new Date().toISOString()
+                };
+                items.push(newItem);
+                updateLastActionTime();
+                render();
+                showToast(`✅ Item added by ${getCurrentUser()}`);
+            }
+
+            function updateItem(id, data) {
+                const idx = items.findIndex(it => it.id === id);
+                if (idx === -1) return;
+                const item = items[idx];
+
+                // Track which apps were changed
+                const oldApps = [...item.apps];
+                const newApps = data.apps || [];
+
+                // Initialize cellUpdates if needed
+                if (!item.cellUpdates) {
+                    item.cellUpdates = {};
+                }
+
+                // Record updates for changed cells
+                const allAppIds = new Set([...oldApps, ...newApps]);
+                allAppIds.forEach(appId => {
+                    const wasInOld = oldApps.includes(appId);
+                    const isInNew = newApps.includes(appId);
+                    if (wasInOld !== isInNew) {
+                        // This cell changed
+                        item.cellUpdates[appId] = {
+                            updatedBy: getCurrentUser(),
+                            updatedAt: new Date().toISOString()
+                        };
+                    }
+                });
+
+                item.category = data.category || item.category;
+                item.criteria = data.criteria || item.criteria;
+                item.description = data.description !== undefined ? data.description : item.description;
+                item.risk = data.risk || item.risk;
+                item.apps = newApps;
+                item.updatedBy = getCurrentUser();
+                item.updatedAt = new Date().toISOString();
+
+                updateLastActionTime();
+                render();
+                showToast(`✅ Item updated by ${getCurrentUser()}`);
+            }
+
+            function deleteItem(id) {
+                if (!confirm('🗑️ Delete this checklist item?')) return;
+                items = items.filter(it => it.id !== id);
+                updateLastActionTime();
+                render();
+                showToast(`🗑️ Item deleted by ${getCurrentUser()}`);
+            }
+
+            function resetAllChecks() {
+                if (!confirm('🔄 Reset all checkmarks to unchecked?')) return;
+                items.forEach(item => {
+                    const oldApps = [...item.apps];
+                    item.apps = [];
+                    // Record reset for each app that was checked
+                    if (!item.cellUpdates) {
+                        item.cellUpdates = {};
+                    }
+                    oldApps.forEach(appId => {
+                        item.cellUpdates[appId] = {
+                            updatedBy: getCurrentUser(),
+                            updatedAt: new Date().toISOString()
+                        };
+                    });
+                    item.updatedBy = getCurrentUser();
+                    item.updatedAt = new Date().toISOString();
+                });
+                updateLastActionTime();
+                render();
+                showToast(`🔄 All checks reset by ${getCurrentUser()}`);
+            }
+
+            // ----- App CRUD with user tracking -----
+            function addApp(name, icon) {
+                if (!name.trim()) { alert('Please enter an app name.'); return false; }
+                if (appStore.some(a => a.name === name.trim())) { alert('App already exists.'); return false; }
+                const newApp = { id: nextAppId++, name: name.trim(), icon: icon || '📱', color: '#94a3b8' };
+                appStore.push(newApp);
+                updateLastActionTime();
+                render();
+                renderAppMgmt();
+                showToast(`📱 App "${name}" added by ${getCurrentUser()}`);
+                return true;
+            }
+
+            function editApp(id, newName, newIcon) {
+                const app = appStore.find(a => a.id === id);
+                if (!app) return false;
+                if (newName.trim() && appStore.some(a => a.name === newName.trim() && a.id !== id)) {
+                    alert('Another app with that name already exists.');
+                    return false;
+                }
+                const oldName = app.name;
+                if (newName.trim()) app.name = newName.trim();
+                if (newIcon) app.icon = newIcon;
+                updateLastActionTime();
+                render();
+                renderAppMgmt();
+                showToast(`✏️ App "${oldName}" edited by ${getCurrentUser()}`);
+                return true;
+            }
+
+            function deleteApp(id) {
+                const app = appStore.find(a => a.id === id);
+                if (!app) return;
+                if (!confirm(`Delete "${app.name}" ?`)) return;
+                items.forEach(item => {
+                    const idx = item.apps.indexOf(id);
+                    if (idx > -1) {
+                        item.apps.splice(idx, 1);
+                        if (item.cellUpdates) {
+                            delete item.cellUpdates[id];
+                        }
+                        item.updatedBy = getCurrentUser();
+                        item.updatedAt = new Date().toISOString();
+                    }
+                });
+                appStore = appStore.filter(a => a.id !== id);
+                updateLastActionTime();
+                render();
+                renderAppMgmt();
+                showToast(`🗑️ App "${app.name}" deleted by ${getCurrentUser()}`);
+            }
+
+            // ----- Render App Mgmt table -----
+            function renderAppMgmt() {
+                appMgmtBody.innerHTML = '';
+                appStore.forEach(app => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>${app.name}</strong></td>
+                        <td class="app-icon-cell">${app.icon}</td>
+                        <td>
+                            <div class="app-actions">
+                                <button class="edit-app-btn" data-id="${app.id}" title="Edit"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="delete-app-btn" data-id="${app.id}" title="Delete"><i class="fas fa-trash"></i> Delete</button>
+                            </div>
+                        </td>
+                    `;
+                    appMgmtBody.appendChild(tr);
+                });
+
+                document.querySelectorAll('.edit-app-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'), 10);
+                        const app = appStore.find(a => a.id === id);
+                        if (!app) return;
+                        const newName = prompt('Edit application name:', app.name);
+                        if (newName === null) return;
+                        const newIcon = prompt('Edit icon (emoji):', app.icon);
+                        if (newIcon === null) return;
+                        editApp(id, newName, newIcon);
+                    });
+                });
+
+                document.querySelectorAll('.delete-app-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'), 10);
+                        deleteApp(id);
+                    });
+                });
+            }
+
+            // ----- Item modal -----
+            function updateAppCheckGrid() {
+                appCheckGrid.innerHTML = '';
+                appStore.forEach(app => {
+                    const div = document.createElement('div');
+                    div.className = 'app-check-item';
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = app.id;
+                    const label = document.createElement('span');
+                    label.textContent = `${app.icon} ${app.name}`;
+                    div.appendChild(checkbox);
+                    div.appendChild(label);
+                    appCheckGrid.appendChild(div);
+                });
+            }
+
+            function populateModalApps(selectedIds = []) {
+                const checkboxes = appCheckGrid.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(cb => {
+                    cb.checked = selectedIds.includes(parseInt(cb.value, 10));
+                });
+            }
+
+            function getSelectedAppIds() {
+                const checkboxes = appCheckGrid.querySelectorAll('input[type="checkbox"]:checked');
+                return Array.from(checkboxes).map(cb => parseInt(cb.value, 10));
+            }
+
+            function openAddModal() {
+                modalTitleText.textContent = 'Add Checklist Item';
+                modalIcon.textContent = '✏️';
+                editId.value = '';
+                formCategory.value = 'Security';
+                formCriteria.value = '';
+                formDescription.value = '';
+                formRisk.value = 'Medium';
+                populateModalApps([]);
+                itemModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => formCriteria.focus(), 100);
+            }
+
+            function openEditModal(id) {
+                const item = items.find(it => it.id === id);
+                if (!item) return;
+                modalTitleText.textContent = 'Edit Checklist Item';
+                modalIcon.textContent = '✏️';
+                editId.value = id;
+                formCategory.value = item.category;
+                formCriteria.value = item.criteria;
+                formDescription.value = item.description || '';
+                formRisk.value = item.risk;
+                populateModalApps(item.apps);
+                itemModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => formCriteria.focus(), 100);
+            }
+
+            function closeItemModal() {
+                itemModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function closeAppMgmtModal() {
+                appMgmtModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function saveItemModal() {
+                const id = editId.value;
+                const data = {
+                    category: formCategory.value,
+                    criteria: formCriteria.value.trim() || '📌 Untitled',
+                    description: formDescription.value.trim(),
+                    risk: formRisk.value,
+                    apps: getSelectedAppIds()
+                };
+                if (id) {
+                    updateItem(id, data);
+                } else {
+                    addItem(data);
+                }
+                closeItemModal();
+            }
+
+            // ----- EXPORT TO EXCEL (.xlsx) with cell-level tracking -----
+            function exportToExcel() {
+                // Build matrix data
+                const appNames = appStore.map(a => a.name);
+                const appIcons = appStore.map(a => a.icon);
+
+                // Header row with user info - expanded to include cell update info
+                let headerRow = ['Category', 'Checklist Item', 'Description', 'Risk', 'Updated By', 'Updated At'];
+                appStore.forEach(app => {
+                    headerRow.push(`${app.name} (${app.icon})`);
+                    headerRow.push(`Updated By`);
+                    headerRow.push(`Updated At`);
+                });
+
+                // Data rows
+                const dataRows = items.map(item => {
+                    const updatedTime = item.updatedAt ? new Date(item.updatedAt).toLocaleString() : '';
+                    const row = [
+                        item.category,
+                        item.criteria,
+                        item.description || '',
+                        item.risk,
+                        item.updatedBy || 'Unknown',
+                        updatedTime
+                    ];
+
+                    // For each app, put ✅/❌ and who updated it
+                    appStore.forEach(app => {
+                        const checked = item.apps.includes(app.id);
+                        row.push(checked ? '✅' : '❌');
+
+                        const cellUpdate = item.cellUpdates && item.cellUpdates[app.id];
+                        if (cellUpdate) {
+                            row.push(cellUpdate.updatedBy || 'System');
+                            row.push(cellUpdate.updatedAt ? new Date(cellUpdate.updatedAt).toLocaleString() :
+                            '');
+                        } else {
+                            row.push('System');
+                            row.push('');
+                        }
+                    });
+                    return row;
+                });
+
+                // Add summary row
+                let summaryRow = ['', '', '', '', 'Total Items:', items.length];
+                appStore.forEach(() => {
+                    summaryRow.push('', '', '');
+                });
+                dataRows.push(summaryRow);
+
+                // Combine
+                const wsData = [headerRow, ...dataRows];
+
+                // Create workbook
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+                // Set column widths - expanded for cell tracking
+                let colWidths = [
+                    { wch: 25 }, // Category
+                    { wch: 35 }, // Checklist Item
+                    { wch: 40 }, // Description
+                    { wch: 15 }, // Risk
+                    { wch: 18 }, // Updated By
+                    { wch: 25 }, // Updated At
+                ];
+                // Add widths for each app (3 columns per app: status, updated by, updated at)
+                appNames.forEach(() => {
+                    colWidths.push({ wch: 8 }); // status
+                    colWidths.push({ wch: 15 }); // updated by
+                    colWidths.push({ wch: 22 }); // updated at
+                });
+                ws['!cols'] = colWidths;
+
+                // Add to workbook
+                XLSX.utils.book_append_sheet(wb, ws, 'Checklist Matrix');
+
+                // Generate and download
+                const fileName =
+                `App_Matrix_Checklist_${new Date().toISOString().slice(0, 10)}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+
+                showToast(`📊 Excel exported by ${getCurrentUser()}`);
+            }
+
+            // ----- Event listeners -----
+            // User controls
+            loadUser();
+            setUserBtn.addEventListener('click', function() {
+                setUserName(userNameInput.value);
+            });
+            userNameInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    setUserName(userNameInput.value);
+                }
+            });
+
+            filterCategory.addEventListener('change', render);
+            filterRisk.addEventListener('change', render);
+            searchInput.addEventListener('input', render);
+            clearSearch.addEventListener('click', function() {
+                searchInput.value = '';
+                render();
+                searchInput.focus();
+            });
+            resetAllBtn.addEventListener('click', resetAllChecks);
+            addItemBtn.addEventListener('click', openAddModal);
+            exportExcelBtn.addEventListener('click', exportToExcel);
+
+            manageAppsBtn.addEventListener('click', function() {
+                renderAppMgmt();
+                appMgmtModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                newAppMgmtName.value = '';
+                newAppMgmtIcon.value = '🏦';
+            });
+
+            addAppMgmtBtn.addEventListener('click', function() {
+                const name = newAppMgmtName.value.trim();
+                const icon = newAppMgmtIcon.value;
+                if (addApp(name, icon)) {
+                    newAppMgmtName.value = '';
+                }
+            });
+
+            newAppMgmtName.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') addAppMgmtBtn.click();
+            });
+
+            appMgmtCloseBtn.addEventListener('click', closeAppMgmtModal);
+            appMgmtDoneBtn.addEventListener('click', closeAppMgmtModal);
+            appMgmtModal.addEventListener('click', function(e) {
+                if (e.target === this) closeAppMgmtModal();
+            });
+
+            modalCloseBtn.addEventListener('click', closeItemModal);
+            modalCancelBtn.addEventListener('click', closeItemModal);
+            modalSaveBtn.addEventListener('click', saveItemModal);
+            itemModal.addEventListener('click', function(e) {
+                if (e.target === this) closeItemModal();
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (itemModal.classList.contains('active')) closeItemModal();
+                    if (appMgmtModal.classList.contains('active')) closeAppMgmtModal();
+                }
+                if (e.ctrlKey && e.key === 'n') {
+                    e.preventDefault();
+                    openAddModal();
+                }
+                if (e.ctrlKey && e.key === 'e') {
+                    e.preventDefault();
+                    exportToExcel();
+                }
+            });
+
+            // Initial render
+            render();
+            updateLastActionTime();
+        })();
+    </script>
+</body>
+</html>
